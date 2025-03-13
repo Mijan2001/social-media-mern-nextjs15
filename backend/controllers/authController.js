@@ -223,7 +223,7 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
 
     const htmlTemplate = loadTemplate('otpTemplate.hbs', {
         title: 'OTP for Password Reset',
-        username: newUser.username,
+        username: user?.username,
         otp: otp,
         message: `Your OTP for Password Reset is : ${otp}`
     });
