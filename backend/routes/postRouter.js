@@ -25,6 +25,6 @@ router.get('/user-post/:id', getUserPosts);
 router.post('/save-unsave-post/:postId', isAuthenticated, saveOrUnsavePost);
 router.delete('/delete-post/:id', isAuthenticated, deletePost);
 router.post('/like-dislike/:id', isAuthenticated, likeOrDislikePost);
-router.post('/comment/:id', isAuthenticated, addComment);
+router.post('/comment/:postId', isAuthenticated, addComment);
 
 module.exports = router;

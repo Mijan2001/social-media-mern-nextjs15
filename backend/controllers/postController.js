@@ -10,7 +10,6 @@ exports.createPost = catchAsync(async (req, res, next) => {
     const { caption } = req.body;
     const image = req.file;
     const userId = req.user?._id;
-    console.log('userId => ', userId);
 
     if (!image) {
         return next(new AppError('Please upload an image', 400));
@@ -48,6 +47,8 @@ exports.createPost = catchAsync(async (req, res, next) => {
     if (user) {
         user.posts.push(post.id);
         await user.save({ validateBeforeSave: false });
+    } else {
+        return next(new AppError('No user found with this ID', 404));
     }
 
     post = await post.populate({
@@ -116,7 +117,7 @@ exports.getUserPosts = catchAsync(async (req, res, next) => {
 
 // Save and unsave a post===============
 exports.saveOrUnsavePost = catchAsync(async (req, res, next) => {
-    const postId = req.params.id;
+    const { postId } = req.params;
     const userId = req.user._id;
 
     const user = await User.findById(userId);
@@ -236,9 +237,9 @@ exports.likeOrDislikePost = catchAsync(async (req, res, next) => {
 
 // Add a comment =======================
 exports.addComment = catchAsync(async (req, res, next) => {
-    const { id: postId } = req.params;
+    const { postId } = req.params;
     const userId = req.user._id;
-    const { text } = req.body;
+    const { text } = req?.body;
 
     const post = await Post.findById(postId);
 

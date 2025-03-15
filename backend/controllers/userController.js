@@ -2,12 +2,11 @@ const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const { uploadToCloudinary } = require('../utils/cloudinary');
+const getDataUri = require('../utils/datauri');
 
 // get the user profile by id============
 exports.getProfile = catchAsync(async (req, res, next) => {
     const { id } = req.params;
-
-    console.log('id => ', id);
 
     const user = await User.findById(id)
         .select(
@@ -21,8 +20,6 @@ exports.getProfile = catchAsync(async (req, res, next) => {
             path: 'savedPosts',
             options: { sort: { createdAt: -1 } }
         });
-
-    console.log(' user => ', user);
 
     if (!user) {
         return next(new AppError('No user found with this ID', 404));
@@ -42,7 +39,9 @@ exports.editProfile = catchAsync(async (req, res, next) => {
     const { bio } = req.body;
     const profilePicture = req.file;
 
-    let cloudinary;
+    console.log('Received profilePicture:', profilePicture); // Debugging log
+
+    let cloudinary = null;
     if (profilePicture) {
         const fileUri = getDataUri(profilePicture);
         cloudinary = await uploadToCloudinary(fileUri);
@@ -54,7 +53,7 @@ exports.editProfile = catchAsync(async (req, res, next) => {
         return next(new AppError('No user found with this ID', 404));
     }
     if (bio) user.bio = bio;
-    if (profilePicture) user.profilePicture = cloudinary.secure_url;
+    if (profilePicture) user.profilePicture = cloudinary?.secure_url;
 
     await user.save({ validateBeforeSave: false });
 

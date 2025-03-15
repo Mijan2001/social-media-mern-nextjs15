@@ -22,6 +22,12 @@ const postSchema = new mongoose.Schema(
             ref: 'User',
             required: [true, 'User ID is required']
         },
+        savedPosts: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        ],
         likes: [
             {
                 type: mongoose.Schema.Types.ObjectId,
@@ -33,11 +39,7 @@ const postSchema = new mongoose.Schema(
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Comment'
             }
-        ],
-        createdAt: {
-            type: Date,
-            default: Date.now()
-        }
+        ]
     },
     { timestamps: true }
 );

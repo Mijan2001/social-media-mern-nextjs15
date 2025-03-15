@@ -55,14 +55,18 @@ const userSchema = new mongoose.Schema(
                 ref: 'User'
             }
         ],
-        posts: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Post'
-        },
-        savedPosts: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Post'
-        },
+        posts: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Post'
+            }
+        ],
+        savedPosts: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Post'
+            }
+        ],
         isVerified: {
             type: Boolean,
             default: false
@@ -82,10 +86,6 @@ const userSchema = new mongoose.Schema(
         resetPasswordOTPExpires: {
             type: Date,
             default: null
-        },
-        createdAt: {
-            type: Date,
-            default: Date.now()
         }
     },
     {
